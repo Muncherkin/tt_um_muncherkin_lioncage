@@ -11,9 +11,6 @@ async def test_lioncage(dut):
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
-    G1 = 0b0000100
-    G2 = 0b0001000
-
     # reset
     dut._log.info("reset")
     dut.rst_n.value = 0
@@ -27,11 +24,11 @@ async def test_lioncage(dut):
 
     await ClockCycles(dut.clk, 10)
     dut._log.info("One lion moving out")
-    dut.uio_in.value = G1
+    dut.uio_in.value = 0b0000100
     await ClockCycles(dut.clk, 10)
-    dut.uio_in.value = G1|G2
+    dut.uio_in.value = 0b0000100|0b0001000
     await ClockCycles(dut.clk, 10)
-    dut.uio_in.value = G2 
+    dut.uio_in.value = 0b0001000 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
@@ -40,11 +37,11 @@ async def test_lioncage(dut):
 
     await ClockCycles(dut.clk, 10)
     dut._log.info("One lion moving in")
-    dut.uio_in.value = G2
+    dut.uio_in.value = 0b0001000
     await ClockCycles(dut.clk, 10)
-    dut.uio_in.value = G1|G2
+    dut.uio_in.value = 0b0000100|0b0001000
     await ClockCycles(dut.clk, 10)
-    dut.uio_in.value = G1 
+    dut.uio_in.value = 0b0000100 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
@@ -54,7 +51,7 @@ async def test_lioncage(dut):
     await ClockCycles(dut.clk, 10)
 
     dut._log.info("One lion reversing")
-    dut.uio_in.value = G1
+    dut.uio_in.value = 0b0000100
     await ClockCycles(dut.clk, 10)
 
     #Checking if it counted up as the lion poked its nose in
@@ -62,9 +59,9 @@ async def test_lioncage(dut):
     await ClockCycles(dut.clk, 10)
 
     #Making sure it counted down once the lion was fully back in the cage
-    dut.uio_in.value = G1|G2
+    dut.uio_in.value = 0b0000100|0b0001000
     await ClockCycles(dut.clk, 10)
-    dut.uio_in.value = G1 
+    dut.uio_in.value = 0b0000100 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
@@ -73,11 +70,11 @@ async def test_lioncage(dut):
 
     await ClockCycles(dut.clk, 10)
     dut._log.info("One too many lions moving in causing underflow")
-    dut.uio_in.value = G2
+    dut.uio_in.value = 0b0001000
     await ClockCycles(dut.clk, 10)
-    dut.uio_in.value = G1|G2
+    dut.uio_in.value = 0b0000100|0b0001000
     await ClockCycles(dut.clk, 10)
-    dut.uio_in.value = G1 
+    dut.uio_in.value = 0b0000100 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
