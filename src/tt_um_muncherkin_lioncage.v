@@ -13,14 +13,14 @@ module tt_um_muncherkin_lioncage (
 
     wire reset = ! rst_n;
     wire [6:0] led_out;
-    wire G_one = uio_in[2]; 
-    wire G_two = uio_in[3];
+    wire G_one = ui_in[2]; 
+    wire G_two = ui_in[3];
     assign uo_out[6:0] = led_out;
     assign uo_out[7] = 0;
     assign uio_out = 0; 
 
-    // use bidirectionals as inputs
-    assign uio_oe = 0;
+    // use bidirectionals as outputs
+    assign uio_oe = 8'b11111111;
 
     //Max 15 lions
     reg [3:0] lion_counter;
