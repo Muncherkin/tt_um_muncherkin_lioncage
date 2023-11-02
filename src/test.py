@@ -20,7 +20,7 @@ async def test_lioncage(dut):
     dut.rst_n.value = 1
 
     assert dut.uio_oe == 0
-    assert dut.uo_out == 0b0111111
+    assert int(dut.segments.value) == 0b0111111
 
     await ClockCycles(dut.clk, 10)
     dut._log.info("One lion moving out")
@@ -33,7 +33,7 @@ async def test_lioncage(dut):
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
 
-    assert dut.uo_out == 0b0000110
+    assert int(dut.segments.value) == 0b0000110
 
     await ClockCycles(dut.clk, 10)
     dut._log.info("One lion moving in")
@@ -46,7 +46,7 @@ async def test_lioncage(dut):
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
 
-    assert dut.uo_out == 0b0111111
+    assert int(dut.segments.value) == 0b0111111
     
     await ClockCycles(dut.clk, 10)
 
@@ -55,7 +55,7 @@ async def test_lioncage(dut):
     await ClockCycles(dut.clk, 10)
 
     #Checking if it counted up as the lion poked its nose in
-    assert dut.uo_out == 0b0000110
+    assert int(dut.segments.value) == 0b0000110
     await ClockCycles(dut.clk, 10)
 
     #Making sure it counted down once the lion was fully back in the cage
@@ -66,7 +66,7 @@ async def test_lioncage(dut):
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
 
-    assert dut.uo_out == 0b0111111
+    assert int(dut.segments.value) == 0b0111111
 
     await ClockCycles(dut.clk, 10)
     dut._log.info("One too many lions moving in causing underflow")
@@ -79,4 +79,4 @@ async def test_lioncage(dut):
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 10)
 
-    assert dut.uo_out == 0b1110001
+    assert int(dut.segments.value) == 0b1110001
