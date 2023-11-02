@@ -36,11 +36,7 @@ module tt_um_muncherkin_lioncage (
                 if (G_one) begin 
                    state <= 1;
                    if (! G_two) begin 
-                    if(lion_counter == 15) begin
-                        lion_counter <=0;
-                    end else begin
-                        lion_counter <= lion_counter + 1; 
-                    end
+                    lion_counter <= lion_counter + 1; 
                    end
                 end
             end
@@ -48,11 +44,7 @@ module tt_um_muncherkin_lioncage (
                 if (! G_one) begin 
                    state <= 0;
                    if (! G_two) begin 
-                    if(lion_counter == 0) begin
-                        lion_counter <=15;
-                    end else begin
-                        lion_counter <= lion_counter - 1; 
-                    end
+                    lion_counter <= lion_counter - 1;
                    end
                 end
             end
