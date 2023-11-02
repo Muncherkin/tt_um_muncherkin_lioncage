@@ -54,7 +54,7 @@ async def test_lioncage(dut):
     await ClockCycles(dut.clk, 10)
 
     dut._log.info("One lion reversing")
-    dut.uio_in = G2
+    dut.uio_in.value = G2
     await ClockCycles(dut.clk, 10)
 
     #Checking if it counted up as the lion poked its nose in
