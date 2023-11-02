@@ -1,6 +1,6 @@
 `default_nettype none
 
-module tt_um_muncherkin_lioncage() (
+module tt_um_muncherkin_lioncage (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
     input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
@@ -34,13 +34,17 @@ module tt_um_muncherkin_lioncage() (
             0: begin
                 if (G_one) begin 
                    state <= 1;
-                   if (! G_two) lion_counter <= lion_counter + 1; 
+                   if (! G_two) begin 
+                    lion_counter <= lion_counter + 1; 
+                   end
                 end;
             end; 
             1: begin 
                 if (! G_one) begin 
                    state <= 0;
-                   if (! G_two) lion_counter <= lion_counter - 1; 
+                   if (! G_two) begin 
+                     lion_counter <= lion_counter - 1; 
+                   end
                 end
             end
             default:;
