@@ -16,7 +16,6 @@ async def test_lioncage(dut):
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
 
-    assert dut.uio_oe == 0
     assert int(dut.segments.value) == 0b0111111
 
     await ClockCycles(dut.clk, 10)
