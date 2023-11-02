@@ -17,6 +17,7 @@ module tt_um_muncherkin_lioncage (
     wire G_two = uio_in[3];
     assign uo_out[6:0] = led_out;
     assign uo_out[7] = 0;
+    assign uio_out = 0; 
 
     // use bidirectionals as inputs
     assign uio_oe = 0;
