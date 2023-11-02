@@ -16,8 +16,8 @@ module tt_um_muncherkin_lioncage (
     wire G_one = ui_in[2]; 
     wire G_two = ui_in[3];
     assign uo_out[6:0] = led_out;
-    assign uo_out[7] = 0;
-    assign uio_out = 0; 
+    assign uo_out[7] = 1'b0;
+    assign uio_out = 8'b00000000; 
 
     // use bidirectionals as outputs
     assign uio_oe = 8'b11111111;
@@ -31,25 +31,21 @@ module tt_um_muncherkin_lioncage (
             lion_counter <= 0; 
             state <= 0;
         end else begin
-            case(state)
-            0: begin
+            if (state == 0) begin
                 if (G_one) begin 
                    state <= 1;
                    if (! G_two) begin 
                     lion_counter <= lion_counter + 1; 
                    end
                 end
-            end
-            1: begin 
+            end else begin
                 if (! G_one) begin 
                    state <= 0;
                    if (! G_two) begin 
                     lion_counter <= lion_counter - 1;
                    end
-                end
+                end 
             end
-            default:;
-            endcase
         end
     end
 
