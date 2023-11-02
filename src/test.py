@@ -6,43 +6,75 @@ from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles
 segments = [ 63, 6, 91, 79, 102, 109, 125, 7, 127, 111 ]
 
 @cocotb.test()
-async def test_7seg(dut):
+async def test_lioncage(dut):
     dut._log.info("start")
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
+    G1 = 0b0000100
+    G2 = 0b0001000
+
     # reset
     dut._log.info("reset")
     dut.rst_n.value = 0
-    # set the compare value
-    dut.ui_in.value = 1
+
+    # end reset
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
 
-    # the compare value is shifted 10 bits inside the design to allow slower counting
-    max_count = dut.ui_in.value << 10
-    dut._log.info(f"check all segments with MAX_COUNT set to {max_count}")
-    # check all segments and roll over
-    for i in range(15):
-        dut._log.info("check segment {}".format(i))
-        await ClockCycles(dut.clk, max_count)
-        assert int(dut.segments.value) == segments[i % 10]
+    assert dut.uio_oe == 0
+    assert dut.uo_out == 0b0111111
 
-        # all bidirectionals are set to output
-        assert dut.uio_oe == 0xFF
-
-    # reset
-    dut.rst_n.value = 0
-    # set a different compare value
-    dut.ui_in.value = 3
+    dut._log.info("One lion moving out")
+    dut.uio_in = G1
     await ClockCycles(dut.clk, 10)
-    dut.rst_n.value = 1
+    dut.uio_in = G1|G2
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = G2 
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = 0
 
-    max_count = dut.ui_in.value << 10
-    dut._log.info(f"check all segments with MAX_COUNT set to {max_count}")
-    # check all segments and roll over
-    for i in range(15):
-        dut._log.info("check segment {}".format(i))
-        await ClockCycles(dut.clk, max_count)
-        assert int(dut.segments.value) == segments[i % 10]
+    assert dut.uo_out == 0b0000110
 
+
+    dut._log.info("One lion moving in")
+    dut.uio_in = G2
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = G1|G2
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = G1 
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = 0
+
+    assert dut.uo_out == 0b0111111
+    
+    await ClockCycles(dut.clk, 10)
+
+    dut._log.info("One lion reversing")
+    dut.uio_in = G2
+    await ClockCycles(dut.clk, 10)
+
+    #Checking if it counted up as the lion poked its nose in
+    assert dut.uo_out == 0b0000110
+    await ClockCycles(dut.clk, 10)
+
+    #Making sure it counted down once the lion was fully back in the cage
+    dut.uio_in = G1|G2
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = G1 
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = 0
+
+    assert dut.uo_out == 0b0111111
+
+    await ClockCycles(dut.clk, 10)
+    dut._log.info("One too many lions moving in causing underflow")
+    dut.uio_in = G2
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = G1|G2
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = G1 
+    await ClockCycles(dut.clk, 10)
+    dut.uio_in = 0
+
+    assert dut.uo_out == 0b1110001
