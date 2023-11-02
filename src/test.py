@@ -25,6 +25,7 @@ async def test_lioncage(dut):
     assert dut.uio_oe == 0
     assert dut.uo_out == 0b0111111
 
+    await ClockCycles(dut.clk, 10)
     dut._log.info("One lion moving out")
     dut.uio_in.value = G1
     await ClockCycles(dut.clk, 10)
@@ -33,10 +34,11 @@ async def test_lioncage(dut):
     dut.uio_in.value = G2 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
+    await ClockCycles(dut.clk, 10)
 
     assert dut.uo_out == 0b0000110
 
-
+    await ClockCycles(dut.clk, 10)
     dut._log.info("One lion moving in")
     dut.uio_in.value = G2
     await ClockCycles(dut.clk, 10)
@@ -45,6 +47,7 @@ async def test_lioncage(dut):
     dut.uio_in.value = G1 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
+    await ClockCycles(dut.clk, 10)
 
     assert dut.uo_out == 0b0111111
     
@@ -64,6 +67,7 @@ async def test_lioncage(dut):
     dut.uio_in.value = G1 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
+    await ClockCycles(dut.clk, 10)
 
     assert dut.uo_out == 0b0111111
 
@@ -76,5 +80,6 @@ async def test_lioncage(dut):
     dut.uio_in.value = G1 
     await ClockCycles(dut.clk, 10)
     dut.uio_in.value = 0
+    await ClockCycles(dut.clk, 10)
 
     assert dut.uo_out == 0b1110001
