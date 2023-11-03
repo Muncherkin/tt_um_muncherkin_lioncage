@@ -11,6 +11,7 @@ async def test_lioncage(dut):
     # reset
     dut._log.info("reset")
     dut.rst_n.value = 0
+    dut.ui_in.value = 0
 
     # end reset
     await ClockCycles(dut.clk, 10)
